@@ -11,7 +11,7 @@ import java.util.Calendar;
 public class FilePrinter {
 
     public static final String 
-    		ACCOUNT_STUCK = "accountStuck.txt",
+            ACCOUNT_STUCK = "accountStuck.txt",
             EXCEPTION_CAUGHT = "exceptionCaught.txt",
             CLIENT_START = "clientStartError.txt",
             ADD_PLAYER = "addPlayer.txt",

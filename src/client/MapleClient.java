@@ -451,7 +451,6 @@ public class MapleClient {
             getSession().close(true);
         }
         int loginok = 5;
-        System.out.println("why");
         Connection con = DatabaseConnection.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -509,7 +508,6 @@ public class MapleClient {
         if (loginok == 0) {
             loginattempt = 0;
         }
-        System.out.println(loginok);
         return loginok;
     }
 
