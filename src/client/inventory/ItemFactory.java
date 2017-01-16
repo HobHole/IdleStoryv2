@@ -45,7 +45,7 @@ public enum ItemFactory {
     MERCHANT(6, false);
     private int value;
     private boolean account;
-	private static ReentrantLock lock = new ReentrantLock(true);
+    private static ReentrantLock lock = new ReentrantLock(true);
 
     private ItemFactory(int value, boolean account) {
         this.value = value;
@@ -59,7 +59,6 @@ public enum ItemFactory {
     public List<Pair<Item, MapleInventoryType>> loadItems(int id, boolean login) throws SQLException {
         List<Pair<Item, MapleInventoryType>> items = new ArrayList<>();
 
-		
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
@@ -70,7 +69,6 @@ public enum ItemFactory {
             if (login) {
                 query.append(" AND `inventorytype` = ").append(MapleInventoryType.EQUIPPED.getType());
             }
-
 
             ps = DatabaseConnection.getConnection().prepareStatement(query.toString());
             ps.setInt(1, value);
@@ -135,10 +133,10 @@ public enum ItemFactory {
     public synchronized void saveItems(List<Pair<Item, MapleInventoryType>> items, int id, Connection con) throws SQLException {
         PreparedStatement ps = null;
         PreparedStatement pse = null;
-		ResultSet rs = null;
-		
-		lock.lock();
-		
+        ResultSet rs = null;
+
+        lock.lock();
+
         try {
             StringBuilder query = new StringBuilder();
             query.append("DELETE `inventoryitems`, `inventoryequipment` FROM `inventoryitems` LEFT JOIN `inventoryequipment` USING(`inventoryitemid`) WHERE `type` = ? AND `");
@@ -173,14 +171,14 @@ public enum ItemFactory {
                     if (mit.equals(MapleInventoryType.EQUIP) || mit.equals(MapleInventoryType.EQUIPPED)) {
                         rs = ps.getGeneratedKeys();
 
-						if (!rs.next()) {
-							throw new RuntimeException("Inserting item failed.");
-						}
+                        if (!rs.next()) {
+                            throw new RuntimeException("Inserting item failed.");
+                        }
 
-						pse.setInt(1, rs.getInt(1));
-						
-						rs.close();
-						
+                        pse.setInt(1, rs.getInt(1));
+
+                        rs.close();
+
                         Equip equip = (Equip) item;
                         pse.setInt(2, equip.getUpgradeSlots());
                         pse.setInt(3, equip.getLevel());
@@ -206,11 +204,11 @@ public enum ItemFactory {
                         pse.setInt(23, equip.getRingId());
                         pse.executeUpdate();
                     }
-					pse.close();
+                    pse.close();
                 }
             }
-			
-			ps.close();
+
+            ps.close();
         } finally {
             if (ps != null && !ps.isClosed()) {
                 ps.close();
@@ -218,11 +216,11 @@ public enum ItemFactory {
             if (pse != null && !pse.isClosed()) {
                 pse.close();
             }
-			if(rs != null && !rs.isClosed()) {
-				rs.close();
-			}
-			
-			lock.unlock();
+            if (rs != null && !rs.isClosed()) {
+                rs.close();
+            }
+
+            lock.unlock();
         }
     }
 }
